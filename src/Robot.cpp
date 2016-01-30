@@ -1,4 +1,5 @@
 #include "WPILib.h"
+#include "LidarHandler.h"
 
 #define I2C_SLAVE_ADR 0x53
 
@@ -14,6 +15,7 @@ public:
      lidarHandler()
   {
     SmartDashboard::init();
+    lidarHandler.init();
   }
 
   ~Robot() {
@@ -24,7 +26,8 @@ public:
   {
     while (IsTest() && IsEnabled())
       {
-	SmartDashboard::PutString("DB/String 0", "Test");
+       SmartDashboard::PutString("DB/String 0", "Test");
+       lidarHandler.loop();
       }
   }
 };

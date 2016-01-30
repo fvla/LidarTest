@@ -11,6 +11,7 @@
 #define SRC_LIDARHANDLER_H_
 
 #define I2C_SLAVE_ADR 0x53
+#define ADXL_CONFIG_PORT 0x2d
 
 class LidarHandler {
 
@@ -18,6 +19,10 @@ class LidarHandler {
 
 public:
    LidarHandler();
+
+   void init();
+   void loop();
+
    virtual ~LidarHandler();
 };
 

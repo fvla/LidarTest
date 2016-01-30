@@ -15,3 +15,13 @@ LidarHandler::~LidarHandler() {
    delete m_i2cChannel;
 }
 
+void LidarHandler::init() {
+   m_i2cChannel->Write(ADXL_CONFIG_PORT, 0);
+   m_i2cChannel->Write(ADXL_CONFIG_PORT, 16);
+   m_i2cChannel->Write(ADXL_CONFIG_PORT, 8);
+}
+
+void LidarHandler::loop() {
+
+}
+

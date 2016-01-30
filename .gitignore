@@ -7,3 +7,4 @@ build.properties
 build.xml
 sysProps.xml
 *~
+/Debug/
