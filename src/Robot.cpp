@@ -7,17 +7,17 @@
  */
 class Robot: public SampleRobot
 {
-   I2C * i2cChannel;
+   LidarHandler lidarHandler;
 
 public:
-  Robot()
+  Robot():
+     lidarHandler()
   {
     SmartDashboard::init();
-    i2cChannel = new I2C(I2C::kOnboard, I2C_SLAVE_ADR);
   }
 
   ~Robot() {
-     delete i2cChannel;
+
   }
 
   void Test()
