@@ -1,0 +1,8 @@
+Debug/*
+.cproject
+.gitignore
+.project
+.settings/*
+build.properties
+build.xml
+*~
