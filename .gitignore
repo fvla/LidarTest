@@ -5,4 +5,5 @@ Debug/*
 .settings/*
 build.properties
 build.xml
+sysProps.xml
 *~
