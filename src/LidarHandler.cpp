@@ -5,7 +5,7 @@
  *      Author: Ian
  */
 
-#include <LidarHandler.h>
+#include "LidarHandler.h"
 
 LidarHandler::LidarHandler() {
    m_i2cChannel = new I2C(I2C::kOnboard, I2C_SLAVE_ADR);
@@ -16,12 +16,28 @@ LidarHandler::~LidarHandler() {
 }
 
 void LidarHandler::init() {
-   m_i2cChannel->Write(ADXL_CONFIG_PORT, 0);
-   m_i2cChannel->Write(ADXL_CONFIG_PORT, 16);
-   m_i2cChannel->Write(ADXL_CONFIG_PORT, 8);
+
 }
 
 void LidarHandler::loop() {
+   short response = 100;
+   while(response != 0) {
+      response = m_i2cChannel->Write(REGISTER_MEASURE, MEASURE_VALUE);
+      Wait(0.001);
+   }
 
+   unsigned char distanceArray[2];
+
+   response = 100;
+   while(response != 0) {
+      response = m_i2cChannel->Read(REGISTER_MEASURE, REGISTER_HIGH_LOWB, distanceArray);
+      Wait(0.001);
+   }
+
+   int distance = (distanceArray[0] << 8) + distanceArray[1];
+
+   std::stringstream ss;
+   ss << distance;
+   SmartDashboard::PutString("DB/String 1", ss.str());
 }
 
