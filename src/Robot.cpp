@@ -1,8 +1,6 @@
 #include "WPILib.h"
 #include "LidarHandler.h"
 
-#define I2C_SLAVE_ADR 0x53
-
 /**
  * This is a demo program showing how to use Mecanum control with the RobotDrive class.
  */
@@ -19,15 +17,18 @@ public:
   }
 
   ~Robot() {
-
+     lidarHandler.~LidarHandler();
   }
 
   void Test()
   {
     while (IsTest() && IsEnabled())
       {
-       SmartDashboard::PutString("DB/String 0", "Test");
        lidarHandler.loop();
+       if(SmartDashboard::GetBoolean("DB/Button 1", false)) {
+          SmartDashboard::PutBoolean("DB/Button 1", false);
+          lidarHandler.init();
+       }
       }
   }
 };

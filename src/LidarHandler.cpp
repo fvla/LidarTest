@@ -8,7 +8,7 @@
 #include "LidarHandler.h"
 
 LidarHandler::LidarHandler() {
-   m_i2cChannel = new I2C(I2C::kOnboard, I2C_SLAVE_ADR);
+   m_i2cChannel = new I2C(I2C::kMXP, I2C_SLAVE_ADR);
 }
 
 LidarHandler::~LidarHandler() {
@@ -16,28 +16,44 @@ LidarHandler::~LidarHandler() {
 }
 
 void LidarHandler::init() {
-
+   counter = 0;
+   successCounter = 0;
 }
 
 void LidarHandler::loop() {
-   short response = 100;
-   while(response != 0) {
-      response = m_i2cChannel->Write(REGISTER_MEASURE, MEASURE_VALUE);
-      Wait(0.001);
+   m_i2cChannel->Write(REGISTER_MEASURE, MEASURE_VALUE);
+
+   std::stringstream ss2;
+   ss2 << counter;
+   std::stringstream ss3;
+   if(counter == 0)
+      ss3 << 0;
+   else
+      ss3 << ((double) successCounter / counter) * 100;
+
+   SmartDashboard::PutString("DB/String 5","Lidar call # = " + ss2.str());
+   SmartDashboard::PutString("DB/String 6","Successes " + ss3.str());
+
+   Wait(0.05); //in between write and read requests
+
+   byte high;
+   byte low;
+
+   m_i2cChannel->Read(REGISTER_HIGHB, 1, &high);
+   m_i2cChannel->Read(REGISTER_LOWB, 1, &low);
+
+   int distance = (high << 8) + low;
+
+   if(distance != 0) {
+      successCounter++;
    }
-
-   unsigned char distanceArray[2];
-
-   response = 100;
-   while(response != 0) {
-      response = m_i2cChannel->Read(REGISTER_MEASURE, REGISTER_HIGH_LOWB, distanceArray);
-      Wait(0.001);
+   counter++;
+   if(counter == 50) {
+      init();
    }
-
-   int distance = (distanceArray[0] << 8) + distanceArray[1];
 
    std::stringstream ss;
    ss << distance;
-   SmartDashboard::PutString("DB/String 1", ss.str());
+   SmartDashboard::PutString("DB/String 0", "Lidar Distance = " + ss.str());
 }
 

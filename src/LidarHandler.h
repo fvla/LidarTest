@@ -14,10 +14,17 @@
 #define REGISTER_MEASURE 0x00
 #define MEASURE_VALUE 0x04
 #define REGISTER_HIGH_LOWB 0x8f
+#define REGISTER_HIGHB 0x0f
+#define REGISTER_LOWB 0x10
+
+typedef unsigned char byte;
 
 class LidarHandler {
 
    I2C * m_i2cChannel;
+
+   int counter;
+   int successCounter;
 
 public:
    LidarHandler();
